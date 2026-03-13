@@ -3,7 +3,13 @@ import { TodoProvider } from "./contexts/TodoContext.jsx";
 import { Route, Routes } from "react-router-dom";
 
 import Layout from "./Layout.jsx";
-import { NotePage, ClockPage, TodoPage, HomePage } from "./pages/index.js";
+import {
+  NotePage,
+  ClockPage,
+  TodoPage,
+  HomePage,
+  AuthFormPage,
+} from "./pages/index.js";
 import { NoteProvider } from "./contexts/NoteContext.jsx";
 
 function App() {
@@ -19,12 +25,7 @@ function App() {
 
     <Routes>
       <Route element={<Layout />}>
-        <Route
-          path="/"
-          element={
-            <HomePage/>
-          }
-        />
+        <Route path="/" element={<HomePage />} />
         <Route
           path="/todo"
           element={
@@ -49,6 +50,15 @@ function App() {
             </TodoProvider>
           }
         />
+        <Route
+          path="/login"
+          element={
+            <div>
+              <AuthFormPage isLogin={true} />
+            </div>
+          }
+        />
+        <Route path="/register" element={<AuthFormPage />} />
       </Route>
     </Routes>
   );
