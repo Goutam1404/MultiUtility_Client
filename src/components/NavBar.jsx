@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 function NavBar() {
   const isDark = true;
+   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const sections = [
     { id: "todo", label: "ToDo", icon: "✅" },
@@ -58,16 +59,17 @@ function NavBar() {
               {isDark ? "☀" : "🌙"}
             </button>
             <Link
-              to="#"
+              to="login"
               className="flex-1 py-3 px-4 text-center bg-blue-600 rounded-lg mr-2 text-white font-medium transition-all hover:bg-blue-800 cursor-pointer duration-200"
-              onClick={handleAlert}
+              // onClick={() => navigate("/login")}
             >
               Login
             </Link>
             <Link
-              to="#"
+              to="register"
               className="px-4 py-3 text-center bg-gray-600 rounded-lg mr-2 text-white font-medium transition-all hover:bg-gray-800 cursor-pointer duration-200"
-              onClick={handleAlert}
+              // onClick={handleAlert}
+              // onClick={() => navigate("/register")}
             >
               Sign Up
             </Link>
@@ -140,16 +142,16 @@ function NavBar() {
               </button>
               <div className="flex gap-2">
                 <Link
-                  to="#"
+                  to="login"
                   className="flex-1 py-3 text-center bg-blue-600 hover:bg-blue-800 rounded-lg text-white"
-                  onClick={handleAlert}
+                  // onClick={handleAlert}
                 >
                   Login
                 </Link>
                 <Link
-                  to="#"
+                  to="register"
                   className="flex-1 py-3 text-center bg-gray-700 hover:bg-gray-800 rounded-lg text-white"
-                  onClick={handleAlert}
+                  // onClick={handleAlert}
                 >
                   Sign Up
                 </Link>
