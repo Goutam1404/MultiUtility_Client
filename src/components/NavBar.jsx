@@ -121,7 +121,7 @@ function NavBar() {
               <NavLink
                 key={section.id}
                 to={section.id}
-                onClick={() => setIsOpen(false)} // Close menu on click
+                onClick={() =>setIsOpen(!isOpen)} // Close menu on click
                 className={({ isActive }) =>
                   `flex items-center px-4 py-3 rounded-lg  hover:bg-gray-900 ${
                     isActive ? "bg-gray-900" : "bg-gray-700"

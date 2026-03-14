@@ -2,43 +2,45 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import {  useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-// import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext.jsx";
+
 
 function AuthFormPage({ isLogin = false }) {
   // const {isLogin, setIsLogin} = useState(false);
   const navigate = useNavigate();
-//   const { user, login, register, resetPassOtp } = useAuth();
+  const { user, login, register } = useAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
-//     console.log("Handle submit function in authform");
+    console.log("Handle submit function in authform");
 
-//     e.preventDefault();
-//     if (!isLogin) {
-//       await register(username, email, password);
-//       // alert("Success! Now please login.");
-//       navigate("/email-verify");
-//       setTimeout(() => {
-//         navigate("/login");
-//       }, 2000);
-//     } else {
-//       try {
-//         await login(email, password);
-//         navigate("/home");
-//         toast.success("Logged in successfully!");
-//         navigate("/home");
-//       } catch (error) {
-//         console.error("Error in fetching data in login", error);
-//         const message =
-//           error.response?.data?.message ||
-//           "Login failed. Please check your credentials.";
-//         toast.error(message);
-//         setEmail(email);
-//         setPassword(password);
-//       }
-//     }
+    e.preventDefault();
+    if (!isLogin) {
+      await register(username, email, password);
+      // alert("Success! Now please login.");
+      navigate("/email-verify");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } else {
+      try {
+        await login(email, password);
+      
+        alert("Logged in successfully!");
+        navigate("/notes");
+      } catch (error) {
+        console.error("Error in fetching data in login", error);
+        const message =
+          error.response?.data?.message ||
+          "Login failed. Please check your credentials.";
+        // toast.error(message);
+        alert(message)
+        setEmail(email);
+        setPassword(password);
+      }
+    }
   };
 
   const handleResetPass = async () => {
