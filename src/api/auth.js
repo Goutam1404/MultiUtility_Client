@@ -5,7 +5,7 @@ const registerUser = async (userCred) =>
   await API.post("/user/register", userCred); 
 const loginUser = async (userCred) => await API.post("/user/login", userCred);
 const getUser = async () => await API.get("/user/user-info");
-const logOut = async () => await API.post("/user/logout");
+const logOutUser = async () => await API.post("/user/logout");
 const deleteAccount = async () => await API.delete("/user/delete");
 
-export { registerUser, loginUser, getUser, logOut, deleteAccount };
+export { registerUser, loginUser, getUser, logOutUser, deleteAccount };
