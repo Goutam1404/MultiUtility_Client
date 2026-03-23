@@ -7,17 +7,17 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const { setService } = useService();
-
+  const { service, setService } = useService();
+  
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        setService(false);
-
+        
         const res = await getUser();
-        console.log(res.data.userInfo);
+        // console.log(res.data.userInfo);
         setUser(res.data.userInfo);
       } catch (err) {
+        // setService(true);
         setUser(null);
       }
     };
@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
       alert("Failed to log out");
     }
   };
+  
   const remove = async () => {
     try {
       await deleteAccount();

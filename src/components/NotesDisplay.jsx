@@ -6,7 +6,7 @@ function NotesDisplay({ notes }) {
   const [selectedNote, setSelectedNote] = useState(null);
   const [modalMode, setModalMode] = useState(null);
 
-  console.log("Notes: " + notes.id + ": " + notes.title);
+  // console.log("Notes: " + notes.id + ": " + notes.title);
 
   return (
     <>
@@ -67,7 +67,7 @@ function NotesDisplay({ notes }) {
                     <button
                       className="bg-red-600 px-3 py-2 rounded-md hover:bg-red-700"
                       onClick={() => {
-                        deleteNote(selectedNote.id);
+                        deleteNote(selectedNote._id || selectedNote.id);
                         setModalMode(null);
                       }}
                     >
@@ -120,7 +120,7 @@ function NotesDisplay({ notes }) {
                 </button>
                 <button
                   className="rounded bg-red-700 hover:bg-red-800 cursor-pointer px-2 sm:px-3 py-1"
-                  onClick={() => deleteNote(notes.id)}
+                  onClick={() => deleteNote(notes._id || notes.id)}
                 >
                   Delete
                 </button>
