@@ -1,70 +1,131 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { createContext, useContext } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
+import {
+  createTodo,
+  getAllTodo,
+  editTodo,
+  removeTodo,
+  createTask,
+  getAllTask,
+  editTask,
+  removeTask,
+  toggleTask,
+} from "../api/todo.js";
+import { useAuth } from "./AuthContext.jsx";
 
 export const TodoContext = createContext();
 
 export const TodoProvider = ({ children }) => {
+  const { user } = useAuth();
   const presetTodo = [
     {
-      id: 1,
+      _id: 1,
       todo: "Starting of TODO application",
       completed: false,
     },
   ];
-  
-  const [todos, setTodos] = useState(() => {
-    try {
-      const savedTodo = localStorage.getItem("todos");
-      const parsedTodo=JSON.parse(savedTodo)
-      return parsedTodo
-        ? parsedTodo.length > 0
-          ? parsedTodo
-          : ""
-        : presetTodo;
-    } catch (error) {
-      console.error("Error in fetching todo from storage",error);
-      return []
-    }
-  });
-console.log(todos);
 
+  const [todos, setTodos] = useState(
+    !user
+      ? () => {
+          try {
+            const savedTodo = localStorage.getItem("todos");
+            const parsedTodo = JSON.parse(savedTodo);
+            return parsedTodo
+              ? parsedTodo.length > 0
+                ? parsedTodo
+                : ""
+              : presetTodo;
+          } catch (error) {
+            console.error("Error in fetching todo", error);
+            return [];
+          }
+        }
+      : []
+  );
+  // console.log(todos);
+
+  //Fetching data
   useEffect(() => {
-    console.log("In setting todos in local storage",todos);
-    
-    try {
+    const loadTodos = async () => {
+      try {
+        if (user) {
+          const allTodo = await getAllTodo();
+          setTodos(allTodo.data.todos);
+          // console.log(allTodo.data);
+
+          // for (let todo of allTodo.todos) {
+          //   const allTasks = await getAllTask(todo._id);
+          //   // setTodos((prevTodo)=>[allTasks.data.data,...prevTodo])
+          //   // allTasks.data.data.title-> title of each todoList,
+          //   // allTasks.data.data.tasks[]-> all tasks inside the todo list
+          //   console.log({ allTasks });
+          // }
+        } else {
+          console.log("In setting todos in local storage", todos);
+          localStorage.setItem("todos", JSON.stringify(todos));
+        }
+      } catch (error) {
+        alert("Error in loading todo");
+        console.error("Error in loading todo", error);
+      }
+    };
+    loadTodos();
+  }, [user]);
+
+  //loading data from local storage for guest user
+  useEffect(() => {
+    if (!user) {
       localStorage.setItem("todos", JSON.stringify(todos));
-    } catch (error) {
-      console.error("Error in setting todo to local storage");
     }
-  }, [todos]);
+  }, [todos, user]);
 
-  const addTodo = (todo) => {
+  const addTodo = async (todo, task) => {
+    if (user) {
+      try {
+        const res = await createTodo(todo);
 
-    const newTodo = { ...todo, id: Date.now(), completed: false };
-    console.log(newTodo);
-    
-    setTodos((prev) => [newTodo, ...prev]);
+        if (task) {
+          await createTask(res.data._id, task);
+        }
+      } catch (error) {
+        alert("Error in creating note");
+        console.error(error);
+      }
+    } else {
+      const newTodo = { todo, _id: Date.now(), completed: false };
+      console.log(newTodo);
+      setTodos((prev) => [newTodo, ...prev]);
+    }
   };
 
   const updateTodo = (todoId, todo) => {
+    console.log(todo + " <=todo id=> " + todoId);
+
     setTodos((prev) =>
-      prev.map((task) =>
-        task.id === todoId ? { ...task, todo } : task
-      )
+      prev.map((task) => (task._id === todoId ? { ...task, todo } : task))
     );
   };
 
-  const deleteTodo = (todoId) => {
-    setTodos((prev) => prev.filter((task) => task.id !== todoId));
+  const deleteTodo = async (todoId) => {
+    if (user) {
+      await removeTodo(todoId);
+    } else {
+      setTodos((prev) => prev.filter((task) => task._id !== todoId));
+    }
   };
 
-  const toggleCompleted = (todoId) => {
-    setTodos((prev) =>
-      prev.map((task) =>
-        task.id === todoId ? { ...task, completed: !task.completed } : task
-      )
-    );
+  const toggleCompleted = async (todoId, taskId) => {
+    if (user) {
+      await toggleTask(todoId, taskId);
+    } else {
+      setTodos((prev) =>
+        prev.map((task) =>
+          task._id === todoId
+            ? { ...task, isCompleted: !task.isCompleted }
+            : task
+        )
+      );
+    }
   };
 
   const value = {

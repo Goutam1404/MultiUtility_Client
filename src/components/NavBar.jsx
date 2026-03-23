@@ -15,21 +15,25 @@ function NavBar() {
     { id: "clock", label: "Clock", icon: "🕐" },
   ];
   // console.log(user);
-
+  // console.log(guest);
+  
   const handleAlert = () => {
     alert("These features are not available currently");
   };
 
   const { service, setService } = useService();
-  const handleService = () => {
+  // console.log(service);
+  
+  const handleService = (e) => {
     // console.log(service);
-    const serviceState = !service;
-    if (serviceState) {
-      alert("Guest mode off");
-    } else {
+     e.preventDefault();
+     setService((prev)=>!prev);
+    
+    if (service) {
       alert("In guest mode now");
+    } else {
+      alert("Guest mode off");
     }
-    setService(serviceState);
   };
 
   const handleLogout = () => {
@@ -47,7 +51,7 @@ function NavBar() {
           isDark ? "bg-[#060c16]" : "bg-white"
         }`}
       >
-        <div className="container mx-auto px-2 py-4 flex flex-wrap gap-2  justify-between items-center">
+        <div className="container mx-auto px-2 py-2 flex flex-wrap gap-2  justify-between items-center">
           <div>
             <Link
               to=""
@@ -57,7 +61,7 @@ function NavBar() {
             </Link>
           </div>
           {/* mid links */}
-          {!service && (
+          {(!service || user) && (
             <div
               className={`hidden md:flex flex-wrap gap-2 max-w-screen justify-center items-center mx-auto `}
             >
@@ -108,17 +112,20 @@ function NavBar() {
                   </Link>
                 </div>
               )}
-              {guest && (
-                <Link
+              {!user && (
+                <button
                   className={`px-3 py-3 flex-1 text-center ${
                     service
                       ? "bg-indigo-900 hover:bg-indigo-950 "
                       : "bg-green-700 hover:bg-green-800"
                   } rounded-lg text-white font-medium transition-all cursor-pointer duration-200`}
-                  onClick={handleService}
+                  onClick={(e) => {
+                    handleService(e);
+                    console.log("Clicking for change");
+                  }}
                 >
                   {service ? "Guest" : "User"}
-                </Link>
+                </button>
               )}
             </div>
           ) : (
@@ -127,7 +134,7 @@ function NavBar() {
               <div className="absolute w-30 hidden group-hover:block top-0 right-0 z-10 rounded pt-10">
                 <ul className="list-none bg-gray-700 p-2 text-sm m-0 ">
                   <li
-                    className="py-1 px-2 pr-10 hover:bg-gray-600 cursor-pointer"
+                    className="transition-all duration-200 hover:scale-102 active:scale-95 hover:bg-gray-600 cursor-pointer"
                     onClick={handleLogout}
                   >
                     Log out
@@ -193,21 +200,22 @@ function NavBar() {
               isDark ? "border-gray-800" : "border-gray-100"
             }`}
           >
-            {sections.map((section) => (
-              <NavLink
-                key={section.id}
-                to={section.id}
-                onClick={() => setIsOpen(!isOpen)} // Close menu on click
-                className={({ isActive }) =>
-                  `flex items-center px-4 py-3 rounded-lg  hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900" : "bg-gray-700"
-                  } text-gray-200`
-                }
-              >
-                <span className="mr-4 text-xl">{section.icon}</span>
-                {section.label}
-              </NavLink>
-            ))}
+            {(!service || user) &&
+              sections.map((section) => (
+                <NavLink
+                  key={section.id}
+                  to={section.id}
+                  onClick={() => setIsOpen(!isOpen)} // Close menu on click
+                  className={({ isActive }) =>
+                    `flex items-center px-4 py-3 rounded-lg  hover:bg-gray-900 ${
+                      isActive ? "bg-gray-900" : "bg-gray-700"
+                    } text-gray-200`
+                  }
+                >
+                  <span className="mr-4 text-xl">{section.icon}</span>
+                  {section.label}
+                </NavLink>
+              ))}
 
             {/* mobile view buttons */}
             {!user ? (
@@ -221,20 +229,25 @@ function NavBar() {
                 <button
                   className={`px-4 py-3 text-center ${
                     service
-                      ? "bg-violet-900 hover:bg-violet-950 "
+                      ? "bg-indigo-900 hover:bg-indigo-950 "
                       : "bg-green-700 hover:bg-green-800"
                   } rounded-lg mr-2 text-white font-medium transition-all  cursor-pointer duration-200`}
-                  onClick={handleService}
+                  onClick={(e) => {
+                    handleService(e);
+                    setIsOpen(false);
+                  }}
                 >
-                  {service ? "User" : "Guest"}
+                  {service ? "Guest" : "User"}
                 </button>
+
                 {service && (
                   <div className="flex gap-2">
                     <Link
                       to="login"
                       className="flex-1 py-3 text-center bg-blue-600 hover:bg-blue-800 rounded-lg text-white"
                       onClick={() => {
-                        setGuest(false);
+                        // setGuest(false);
+                        setIsOpen(false);
                       }}
                     >
                       Login
@@ -242,7 +255,10 @@ function NavBar() {
                     <Link
                       to="register"
                       className="flex-1 py-3 text-center bg-gray-700 hover:bg-gray-800 rounded-lg text-white"
-                      onClick={handleService}
+                      onClick={() => {
+                        // setGuest(false);
+                        setIsOpen(false);
+                      }}
                     >
                       Sign Up
                     </Link>
@@ -252,8 +268,12 @@ function NavBar() {
             ) : (
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-700">
                 <button
-                  className="flex-1 py-3 text-center bg-gray-700 hover:bg-gray-800 rounded-lg text-white"
-                  onClick={handleService}
+                  className="flex-1 py-3 text-center transition-all duration-200 hover:scale-102 active:scale-95 cursor-pointer bg-gray-700 hover:bg-gray-800 rounded-lg text-white"
+                  onClick={(e) => {
+                    // handleService(e);
+                    setIsOpen(false);
+                    handleLogout();
+                  }}
                 >
                   Log Out
                 </button>
