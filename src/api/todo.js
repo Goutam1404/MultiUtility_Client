@@ -1,14 +1,14 @@
 import API from "./Api.js";
 
-const createTodo = async (title) => await API.post("/todo/create",title);
+const createTodo = async (title) => await API.post("/todo/create",{title});
 const getAllTodo = async () => await API.get("/todo");
 const editTodo = async (todoId, updatedData) =>
   await API.patch(`/todo/${todoId}`, updatedData);
 const removeTodo = async (todoId) => await API.delete(`/todo/${todoId}`);
 
 //task
-const createTask = async (todoId, task) =>
-  await API.post(`/todo/task/${todoId}`, task); // task will only store taskText
+const createTask = async (todoId, taskText) =>
+  await API.post(`/todo/task/${todoId}`, { taskText }); // task will only store taskText
 
 const getAllTask = async (todoId) => await API.get(`/todo/task/${todoId}`);
 

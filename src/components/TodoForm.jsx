@@ -11,8 +11,10 @@ function TodoForm() {
   const add = (e) => {
     e.preventDefault();
     console.log(todo);
-    if (!todo) return;
-    else addTodo(todo);
+    if (!todo) {
+      alert("Enter the todo name to add");
+      return;
+    } else addTodo(todo);
     setTodo("");
     // setTask("");
   };
@@ -35,12 +37,12 @@ function TodoForm() {
             value={task}
             onChange={(e) => setTask(e.target.value)}
           /> */}
-          <div className="flex justify-between p-1 mx-2">
+          <div className="flex justify-between items-center p-1 mx-2">
             <button
               type="submit"
               className="rounded-r-lg text-md p-1 hover:text-white duration-150 text-white/40 shrink-0 cursor-pointer"
             >
-              + Add Task
+              + Add Todo
             </button>
             <div>
               {/* <button

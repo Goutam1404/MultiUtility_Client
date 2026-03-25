@@ -29,7 +29,7 @@ function TodoPage() {
         >
           {todos &&
             todos.map((todo, index) => (
-              <div key={todo._id} className="w-full">
+              <div key={index} className="w-full">
                 <TodoDisplay todo={todo} />
               </div>
             ))}
