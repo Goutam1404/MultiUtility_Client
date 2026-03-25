@@ -1,22 +1,17 @@
 import React, { useState } from "react";
-import { editTask, getAllTask } from "../api/todo";
+import { editTask, getAllTask, removeTask } from "../api/todo";
 import { useTodo } from "../contexts/TodoContext";
 
-function TaskDisplay({ todoItem, todoId }) {
-  const { updateTodo, deleteTodo, toggleCompleted } = useTodo();
+function TaskDisplay({ todoItem, todoId, deleteTask, editTaskText }) {
+  const { updateTodo, toggleCompleted } = useTodo();
+  const [todo, setTodo] = useState(todoItem);
   const [isTodoEditable, setIsTodoEditable] = useState(false);
   const [todoMsg, setTodoMsg] = useState(todoItem.task);
   const [toggle, setToggle] = useState(todoItem.isCompleted);
   //   const [task, setTask] = useState();
-
   // console.log(todo.title);
   // console.log(todoId);
   // console.log(todo);
-
-  const editTodo = async (taskId, todoMsg) => {
-    await editTask(todoId, taskId, todoMsg);
-    setIsTodoEditable(false);
-  };
 
   const toggleStatus = (taskId) => {
     toggleCompleted(todoId, taskId);
@@ -48,26 +43,29 @@ function TaskDisplay({ todoItem, todoId }) {
         readOnly={!isTodoEditable}
       />
       {/* Edit, Save Button */}
-      <button
-        className="inline-flex w-5 h-5 sm:w-8 sm:h-8 rounded-lg text-sm border border-black/10 justify-center items-center  shrink-0 disabled:opacity-50"
-        onClick={() => {
-          if (todoItem.isCompleted) return;
+      <div className="flex gap-1">
+        <button
+          className="inline-flex w-6 h-6 rounded-lg text-sm border border-black/10 justify-center items-center hover:bg-[#b99dcf] cursor-pointer shrink-0 disabled:opacity-50"
+          onClick={() => {
+            if (todoItem.isCompleted) return;
 
-          if (isTodoEditable) {
-            editTodo(todoItem._id, todoMsg);
-          } else setIsTodoEditable((prev) => !prev);
-        }}
-        disabled={todoItem.isCompleted}
-      >
-        {isTodoEditable ? "📁" : "✏️"}
-      </button>
-      {/* Delete Todo Button */}
-      <button
-        className="inline-flex w-5 h-5 sm:w-8 sm:h-8 rounded-lg text-sm border border-black/10 justify-center items-center  hover:bg-gray-100 shrink-0"
-        onClick={() => deleteTodo(todoItem._id)}
-      >
-        ❌
-      </button>
+            if (isTodoEditable) {
+              editTaskText  (todoItem._id, todoMsg);
+              setIsTodoEditable(false);
+            } else setIsTodoEditable((prev) => !prev);
+          }}
+          disabled={todoItem.isCompleted}
+        >
+          {isTodoEditable ? "📁" : "✏️"}
+        </button>
+        {/* Delete Todo Button */}
+        <button
+          className="inline-flex w-6 h-6 rounded-lg text-sm border border-black/10 justify-center items-center cursor-pointer hover:bg-[#b99dcf] shrink-0"
+          onClick={() => deleteTask(todoId, todoItem._id)}
+        >
+          ❌
+        </button>
+      </div>
     </div>
   );
 }

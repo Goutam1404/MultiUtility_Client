@@ -1,3 +1,7 @@
+//Things to fix for todo
+// todoTitle state need to be removed as these increases the database call 
+//Bringing all the function implementation of todos to in these file
+
 import { useEffect, useState, createContext, useContext } from "react";
 import {
   createTodo,
@@ -16,6 +20,7 @@ export const TodoContext = createContext();
 
 export const TodoProvider = ({ children }) => {
   const { user } = useAuth();
+  const [todoTitle,setTodoTitle]=useState("");
   const presetTodo = [
     {
       _id: 1,
@@ -70,7 +75,7 @@ export const TodoProvider = ({ children }) => {
       }
     };
     loadTodos();
-  }, [user]);
+  }, [user,todoTitle]);
 
   //loading data from local storage for guest user
   useEffect(() => {
@@ -79,22 +84,21 @@ export const TodoProvider = ({ children }) => {
     }
   }, [todos, user]);
 
-  const addTodo = async (todo, task) => {
+
+  const addTodo = async (todo) => {
     if (user) {
       try {
         const res = await createTodo(todo);
-
-        if (task) {
-          await createTask(res.data._id, task);
-        }
+        setTodos((prev) => [res, ...prev]);
+        setTodoTitle(todo);
       } catch (error) {
         alert("Error in creating note");
         console.error(error);
       }
     } else {
       const newTodo = { todo, _id: Date.now(), completed: false };
-      console.log(newTodo);
       setTodos((prev) => [newTodo, ...prev]);
+      console.log(newTodo);
     }
   };
 
@@ -109,6 +113,7 @@ export const TodoProvider = ({ children }) => {
   const deleteTodo = async (todoId) => {
     if (user) {
       await removeTodo(todoId);
+      setTodoTitle("remove")
     } else {
       setTodos((prev) => prev.filter((task) => task._id !== todoId));
     }
