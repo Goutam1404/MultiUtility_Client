@@ -27,8 +27,9 @@ function AuthFormPage({ isLogin = false }) {
     } else {
       try {
         await login(email, password);
-      
         alert("Logged in successfully!");
+        console.log("Navigating to notes after login");
+        
         navigate("/notes");
       } catch (error) {
         console.error("Error in fetching data in login", error);
