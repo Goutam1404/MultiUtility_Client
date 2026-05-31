@@ -19,18 +19,20 @@ function TodoPage() {
           user ? "" : "max-w-xl mx-auto bg-[#030b16] mt-10"
         } shadow-md rounded-lg px-2 sm:px-4 py-3 `}
       >
-        <div className={`mb-4 ${user ? "max-w-xl mx-auto" : " "}`}>
+        <div className={`${user ? "max-w-xl mx-auto mb-10 " : "mb-4"}`}>
           <TodoForm />
         </div>
         <div
           className={`${
-            user ? "bg-[#030b16]  rounded-2xl p-2 sm:p-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 " : "flex mt-5 flex-wrap"
+            user
+              ? "bg-[#030b16]  rounded-2xl p-2 sm:p-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 "
+              : "flex mt-5 flex-wrap"
           } gap-y-3`}
         >
           {todos &&
             todos.map((todo, index) => (
               <div key={index} className="w-full">
-                <TodoDisplay todo={todo} />
+                <TodoDisplay key={todo._id} todo={todo} />
               </div>
             ))}
         </div>

@@ -89,7 +89,7 @@ function NotesDisplay({ notes }) {
       )}
 
       {/* Normal display of cards with notes */}
-      <div className="mx-auto px-2 sm:px-4 py-2 sm:py-2 rounded-md bg-[#030b16] shadow-xl ">
+      <div className="mx-auto px-2 sm:px-4 py-2 w-full rounded-md bg-[#030b16] shadow-xl ">
         <div>
           <h2 className="font-bold text-xl sm:text-2xl sm:my-1 line-clamp-1 sm:line-clamp-none sm:mb-2">
             {notes.title}
@@ -108,7 +108,7 @@ function NotesDisplay({ notes }) {
               >
                 Read More
               </span>
-              <div className="flex flex-wrap gap-2 sm:gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-5">
                 <button
                   className="rounded bg-green-700 hover:bg-green-800 cursor-pointer px-2 sm:px-3 py-1 duration-200"
                   onClick={() => {

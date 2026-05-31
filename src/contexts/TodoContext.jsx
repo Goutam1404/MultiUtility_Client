@@ -97,7 +97,8 @@ export const TodoProvider = ({ children }) => {
       }
     } else {
       const newTodo = { todo, _id: Date.now(), completed: false };
-      setTodos((prev) => [newTodo, ...prev]);
+      // setTodos((prev) => [newTodo, ...prev]);
+      setTodos((prev) => [...prev, newTodo]);
       console.log(newTodo);
     }
   };
