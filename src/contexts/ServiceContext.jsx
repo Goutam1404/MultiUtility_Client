@@ -17,14 +17,14 @@ export const ServiceProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("service_mode", JSON.stringify(service));
     console.log(service);
-    
+
     //if the user changes from guest mode to user mode then move the user to home page
     // if (service && window.location.pathname !== "/") {
     //   navigate("/");
     // }
-  }, [service,navigate]);
+  }, [service, navigate]);
 
-console.log("Current Service State:", service, "Type:", typeof service);
+  // console.log("Current Service State:", service, "Type:", typeof service);
 
   const values = { service, setService };
   return (

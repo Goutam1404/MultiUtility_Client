@@ -1,5 +1,5 @@
 //Things to fix for todo
-// todoTitle state need to be removed as these increases the database call 
+// todoTitle state need to be removed as these increases the database call
 //Bringing all the function implementation of todos to in these file
 
 import { useEffect, useState, createContext, useContext } from "react";
@@ -15,12 +15,13 @@ import {
   toggleTask,
 } from "../api/todo.js";
 import { useAuth } from "./AuthContext.jsx";
+import { toast } from "react-toastify";
 
 export const TodoContext = createContext();
 
 export const TodoProvider = ({ children }) => {
   const { user } = useAuth();
-  const [todoTitle,setTodoTitle]=useState("");
+  const [todoTitle, setTodoTitle] = useState("");
   const presetTodo = [
     {
       _id: 1,
@@ -38,8 +39,8 @@ export const TodoProvider = ({ children }) => {
             return parsedTodo
               ? parsedTodo.length > 0
                 ? parsedTodo
-                : ""
-              : presetTodo;
+                : parsedTodo
+              : [];
           } catch (error) {
             console.error("Error in fetching todo", error);
             return [];
@@ -52,9 +53,11 @@ export const TodoProvider = ({ children }) => {
   //Fetching data
   useEffect(() => {
     const loadTodos = async () => {
-      try {
-        if (user) {
+      if (user) {
+        try {
           const allTodo = await getAllTodo();
+          console.log(allTodo.data);
+
           setTodos(allTodo.data.todos);
           // console.log(allTodo.data);
 
@@ -65,17 +68,18 @@ export const TodoProvider = ({ children }) => {
           //   // allTasks.data.data.tasks[]-> all tasks inside the todo list
           //   console.log({ allTasks });
           // }
-        } else {
-          console.log("In setting todos in local storage", todos);
-          localStorage.setItem("todos", JSON.stringify(todos));
+        } catch (error) {
+          toast.warn("Error in loading todo");
+          console.error("Error in loading todo", error);
         }
-      } catch (error) {
-        alert("Error in loading todo");
-        console.error("Error in loading todo", error);
+      } else {
+        console.log("In setting todos in local storage", todos);
+        const saved = localStorage.getItem("todos");
+        setTodos(saved ? JSON.parse(saved) : presetTodo);
       }
     };
     loadTodos();
-  }, [user,todoTitle]);
+  }, [user, todoTitle]);
 
   //loading data from local storage for guest user
   useEffect(() => {
@@ -83,7 +87,6 @@ export const TodoProvider = ({ children }) => {
       localStorage.setItem("todos", JSON.stringify(todos));
     }
   }, [todos, user]);
-
 
   const addTodo = async (todo) => {
     if (user) {
@@ -114,7 +117,7 @@ export const TodoProvider = ({ children }) => {
   const deleteTodo = async (todoId) => {
     if (user) {
       await removeTodo(todoId);
-      setTodoTitle("remove")
+      setTodoTitle("remove");
     } else {
       setTodos((prev) => prev.filter((task) => task._id !== todoId));
     }

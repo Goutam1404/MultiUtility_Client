@@ -26,7 +26,7 @@ function AuthFormPage({ isLogin = false }) {
     } else {
       try {
         await login(email, password);
-        alert("Logged in successfully!");
+        // alert("Logged in successfully!");
         console.log("Navigating to notes after login");
 
         navigate("/notes");
@@ -36,7 +36,7 @@ function AuthFormPage({ isLogin = false }) {
           error.response?.data?.message ||
           "Login failed. Please check your credentials.";
         // toast.error(message);
-        alert(message);
+        // alert(message);
         setEmail(email);
         setPassword(password);
       }

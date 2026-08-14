@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext.jsx";
 import { createNote, editNote, getAllNote, deleteOne } from "../api/note.js";
+import { toast } from "react-toastify";
 
 const NoteContext = createContext();
 
@@ -41,6 +42,7 @@ export const NoteProvider = ({ children }) => {
           // console.log(notes);
           
         } catch (err) {
+          toast.warn("Failed to load notes")
           console.error("Fetch failed", err);
         }
       } else {

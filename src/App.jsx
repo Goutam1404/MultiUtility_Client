@@ -1,7 +1,8 @@
 import React from "react";
-import { TodoProvider } from "./contexts/TodoContext.jsx";
 import { Route, Routes } from "react-router-dom";
-
+// Toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Layout from "./Layout.jsx";
 import {
   NotePage,
@@ -10,6 +11,7 @@ import {
   HomePage,
   AuthFormPage,
 } from "./pages/index.js";
+import { TodoProvider } from "./contexts/TodoContext.jsx";
 import { NoteProvider } from "./contexts/NoteContext.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { ServiceProvider } from "./contexts/ServiceContext.jsx";
@@ -64,6 +66,19 @@ function App() {
             <Route path="/register" element={<AuthFormPage />} />
           </Route>
         </Routes>
+        {/* Adding ToastContainer globally */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          // theme="colored" // Gives full-colour backgrounds to match status
+        />
       </AuthProvider>
     </ServiceProvider>
   );

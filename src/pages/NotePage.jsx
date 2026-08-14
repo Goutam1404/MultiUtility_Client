@@ -15,8 +15,8 @@ function NotePage() {
         </div>
         <div className="flex-1 w-full flex flex-col gap-4">
           {notes && notes.length > 0 ? (
-            notes.map((note, index) => (
-              <div key={note._id || note.id} className="w-full h-fit">
+            notes.map((note) => (
+              <div key={note._id} className="w-full h-fit">
                 <NotesDisplay notes={note} />
               </div>
             ))

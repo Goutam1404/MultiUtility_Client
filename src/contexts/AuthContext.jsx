@@ -15,12 +15,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const { service, setService } = useService();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const verifyUser = async () => {
       try {
         const res = await getUser();
-        // console.log(res.data.userInfo);
+        console.log(res.data.userInfo);
         setUser(res.data.userInfo);
         setLoading(false);
       } catch (err) {
@@ -37,8 +37,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await registerUser({ username, email, password });
       console.log(data);
+      toast.success("Registration successful! Please log in.");
+      navigate("/login");
     } catch (error) {
-      alert("Failed to register");
+      toast.error(error.response?.data?.message || "Failed to register");
       console.log("Failed to register", error);
     } finally {
       setLoading(false);
@@ -48,12 +50,19 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     // console.log("Frontend for login", email, password);
     try {
+      console.log("In login");
+
       const data = await loginUser({ email, password });
-      console.log(data.data.userInfo);
       // console.log(data);
+      // console.log(data.data.userInfo);
       setUser(data.data.userInfo);
+      toast.success("Welcome back!");
+      navigate("/dashboard");
     } catch (error) {
-      alert("Failed to log in");
+      console.log("Error in login:" + error);
+
+      // alert("Failed to log in");
+      toast.error(error.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
@@ -62,9 +71,14 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       console.log("In log Out");
+      // setLoading(true);
       await logOutUser();
+      setUser(null); // 👈 Clear local user state immediately
+      toast.info("Logged out successfully");
+      navigate("/");
     } catch (error) {
-      alert("Failed to log out");
+      // alert("Failed to log out");
+      toast.error("Failed to log out");
     } finally {
       setLoading(false);
     }
@@ -72,9 +86,15 @@ export const AuthProvider = ({ children }) => {
 
   const remove = async () => {
     try {
+      setLoading(true);
       await deleteAccount();
+      setUser(null);
+      toast.success("Account deleted permanently");
+      navigate("/");
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to delete account");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,6 +106,13 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
   };
+  // {
+  //   loading && (
+  //     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] text-white font-medium text-lg">
+  //       Processing, please wait...
+  //     </div>
+  //   );
+  // }
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
 

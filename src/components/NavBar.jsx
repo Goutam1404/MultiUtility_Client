@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useService } from "../contexts/ServiceContext";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
 
 function NavBar() {
   const isDark = true;
@@ -16,34 +17,32 @@ function NavBar() {
   ];
   // console.log(user);
   // console.log(guest);
-  
+
   const handleAlert = () => {
     alert("These features are not available currently");
   };
 
   const { service, setService } = useService();
   // console.log(service);
-  
+
   const handleService = (e) => {
     // console.log(service);
-     e.preventDefault();
-     setService((prev)=>!prev);
-    
+    e.preventDefault();
+    setService((prev) => !prev);
+
     if (service) {
-      alert("In guest mode now");
-      navigate("/todo")
+      toast.success("In guest mode now");
+      navigate("/todo");
     } else {
-      alert("Guest mode off");
-      navigate("/login")
+      toast.warn("Guest mode off");
+      navigate("/login");
     }
+    setIsOpen(false); 
   };
 
   const handleLogout = () => {
     logout();
-    setTimeout(() => {
-      navigate("/");
-      alert("logout try");
-    }, 2000);
+    setIsOpen(false)
   };
 
   return (
@@ -85,6 +84,7 @@ function NavBar() {
               ))}
             </div>
           )}
+
           {/* buttons */}
           {!user ? (
             <div className="hidden md:flex items-center">
@@ -166,7 +166,7 @@ function NavBar() {
             onClick={() => setIsOpen(!isOpen)}
           >
             {/* Dynamic Hamburger Icon */}
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 hover:cursor-pointer">
               <span
                 className={`block w-6 h-0.5 bg-gray-600 transition-transform ${
                   isOpen ? "rotate-45 translate-y-2" : ""
