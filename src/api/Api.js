@@ -1,11 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://multiutility-server.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
 });
-// "https://multiutility-server.onrender.com/api" ||
 
 export default API;
-
-// new user info :qwertyeng111@gmail.com pass :12345678
