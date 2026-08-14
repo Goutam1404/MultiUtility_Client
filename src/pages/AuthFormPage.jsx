@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext.jsx";
-
 
 function AuthFormPage({ isLogin = false }) {
   // const {isLogin, setIsLogin} = useState(false);
@@ -29,7 +28,7 @@ function AuthFormPage({ isLogin = false }) {
         await login(email, password);
         alert("Logged in successfully!");
         console.log("Navigating to notes after login");
-        
+
         navigate("/notes");
       } catch (error) {
         console.error("Error in fetching data in login", error);
@@ -37,7 +36,7 @@ function AuthFormPage({ isLogin = false }) {
           error.response?.data?.message ||
           "Login failed. Please check your credentials.";
         // toast.error(message);
-        alert(message)
+        alert(message);
         setEmail(email);
         setPassword(password);
       }
@@ -45,10 +44,10 @@ function AuthFormPage({ isLogin = false }) {
   };
 
   const handleResetPass = async () => {
-  //   // await resetPassOtp(email);
-  //   setTimeout(() => {
-  //     navigate("/reset-password", { state: { email } });
-  //   }, 3000);
+    //   // await resetPassOtp(email);
+    //   setTimeout(() => {
+    //     navigate("/reset-password", { state: { email } });
+    //   }, 3000);
   };
 
   // useEffect(() => {
@@ -99,7 +98,7 @@ function AuthFormPage({ isLogin = false }) {
               Password
             </label> */}
             <input
-              type="text"
+              type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}

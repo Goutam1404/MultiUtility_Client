@@ -31,8 +31,10 @@ function NavBar() {
     
     if (service) {
       alert("In guest mode now");
+      navigate("/todo")
     } else {
       alert("Guest mode off");
+      navigate("/login")
     }
   };
 
